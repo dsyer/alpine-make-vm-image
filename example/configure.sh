@@ -29,6 +29,18 @@ step 'Enable services'
 rc-update add acpid default
 rc-update add chronyd default
 rc-update add crond default
+rc-update add sshd default
 rc-update add net.eth0 default
 rc-update add net.lo boot
 rc-update add termencoding boot
+
+step 'Add JAVA_HOME'
+cat > /etc/profile.d/java.sh << EOF
+export JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk
+PATH=\$PATH:\$JAVA_HOME/bin
+EOF
+
+step 'Adjust sshd_conf'
+echo root:root | chpasswd
+sed -i -e 's/.PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+
