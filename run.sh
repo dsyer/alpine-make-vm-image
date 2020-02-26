@@ -13,4 +13,8 @@ echo Use 'CTRL-A C' to switch to monitor.
 if qemu-img snapshot -l disk.qcow | grep init; then
     snapshot="-loadvm init"
 fi
-qemu-system-x86_64 -hda disk.qcow -enable-kvm -net nic -net user,hostfwd=tcp::2222-:22,hostfwd=tcp::8080-:8080 -localtime -m 1024 $snapshot
+qemu-system-x86_64 -hda disk.qcow -enable-kvm -net nic -net user,hostfwd=tcp::2222-:22,hostfwd=tcp::8080-:8080 -localtime -m 4096 -nographic $snapshot
+
+# KVM notes:
+# $ sudo usermod -aG kvm $(whoami)
+# Log out and log in to join the new group
