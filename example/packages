@@ -1,7 +1,3 @@
-chrony
-less
-logrotate
+bash
 openssh
-ssmtp
 sudo
-openjdk8
