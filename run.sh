@@ -10,10 +10,11 @@ fi
 
 echo Ready to go. Exposing ssh on port 2222 of host.
 echo Use 'CTRL-A C' to switch to monitor.
-if qemu-img snapshot -l disk.qcow | grep init; then
-    snapshot="-loadvm init"
+if qemu-img snapshot -l disk.qcow | grep server; then
+    echo Using existing snapshot
+    snapshot="-loadvm server"
 fi
-qemu-system-x86_64 -hda disk.qcow -enable-kvm -net nic -net user,hostfwd=tcp::2222-:22,hostfwd=tcp::8080-:8080 -localtime -m 1024 -nographic $snapshot
+qemu-system-x86_64 -hda disk.qcow -enable-kvm -net nic -net user,hostfwd=tcp::2222-:22,hostfwd=tcp::8080-:8080 -localtime -m 512M -nographic $snapshot
 
 # KVM notes:
 # $ sudo usermod -aG kvm $(whoami)
