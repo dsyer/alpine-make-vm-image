@@ -1,18 +1,10 @@
 # Checkpointing with Qemu
 
-Create a disk:
+Create a disk and run Alpine:
 
 ```
-$ qemu-img create -f qcow2 disk.qcow 2G
+$ ./run.sh
 ```
-
-Install Alpine Linux (login as root with no password and follow the instructions in the UI, install into `sda` with `sys` layout):
-
-```
-$ qemu-system-x86_64 -hda disk.qcow -cdrom alpine-standard-3.11.3-x86_64.iso -boot d -net nic -net user -localtime -m 1024
-```
-
-The disk file should be under 40MB at this point. Quit the VM and re-boot it to start up in the new hard disk system. At any time you want you can go into the qemu monitor with `Alt-Ctrl-2`. Type `quit` to exit the VM.
 
 You can make a snapshot of the VM from the monitor (it will increase the size of the file on disk by the size of the memory you asked for on the command line):
 
@@ -103,3 +95,17 @@ The warm start time is "time to first request". The cold starts are as reported 
 -   Another "headless" option is `-curses` which displays the guest terminal console in your command line window using `libcurses`. Press `Esc-2` to get the monitor and `Esc-1` to go back again. I had issues with special characters (like `|` and \`) in the terminal.
 -   As well as the `-net` command line option, you can add `-redir tcp:8080::8080:` to expose a specific port on the host (N.B. this flag is deprecated).
 -   Openssh is installed in the VM if you ask for it, but it won't allow password logins for root by default. You have to edit `/etc/ssh/sshd_config` and set `PermitRootLogin yes` to make it work (then `service sshd restart`).
+
+## Manual VM Image Preparation
+
+```
+$ qemu-img create -f qcow2 disk.qcow 2G
+```
+
+Install Alpine Linux (login as root with no password and follow the instructions in the UI, install into `sda` with `sys` layout):
+
+```
+$ qemu-system-x86_64 -hda disk.qcow -cdrom alpine-standard-3.11.3-x86_64.iso -boot d -net nic -net user -localtime -m 1024
+```
+
+The disk file should be under 40MB at this point. Quit the VM and re-boot it to start up in the new hard disk system. At any time you want you can go into the qemu monitor with `Alt-Ctrl-2`. Type `quit` to exit the VM.
